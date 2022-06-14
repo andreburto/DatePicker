@@ -25,6 +25,16 @@ namespace DatePicker
 
         }
 
+        public void RemoveAnnualDate(int m, int d)
+        {
+
+        }
+
+        public void RemoveSpecificDate(int m, int d, int y)
+        {
+
+        }
+
         public void LoadFile(String file)
         {
 

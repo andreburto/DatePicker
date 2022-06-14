@@ -9,8 +9,36 @@ namespace DatePicker
 {
     class DatePickerViewModel : INotifyPropertyChanged
     {
-        public DateTime _today;
-        public DateTime _currentDay;
+        private DateTime _today;
+        private DateTime _currentDay;
+        private bool _annual;
+        private bool _specialDay;
+        private SpecialDate sd;
+
+        public bool IsAnnual
+        {
+            get
+            {
+                return _annual;
+            }
+            set
+            {
+                _annual = value;
+                
+            }
+        }
+
+        public bool IsSpecialDay
+        {
+            get
+            {
+                return _specialDay;
+            }
+            set
+            {
+                _specialDay = value;
+            }
+        }
 
         public String Year
         {
@@ -40,7 +68,7 @@ namespace DatePicker
         {
             get
             {
-                return _currentDay.Year > _today.Year;
+                return _today.Year > _currentDay.Year;
             }
         }
 
@@ -60,10 +88,29 @@ namespace DatePicker
             }
         }
 
+        private void _changeYear(int n)
+        {
+            _today = _today.AddYears(n);
+            NotifyPropertyChanged("Year");
+            NotifyPropertyChanged("YearGoBack");
+        }
+
+        public void NextYear()
+        {
+            _changeYear(1);
+        }
+
+        public void PreviousYear()
+        {
+            _changeYear(-1);
+        }
+
         public DatePickerViewModel()
         {
             _today = DateTime.Now;
             _currentDay = DateTime.Now;
+            _annual = false;
+            _specialDay = false;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

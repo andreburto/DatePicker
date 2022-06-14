@@ -86,9 +86,9 @@
                 <ColumnDefinition Width="1*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource BottomText}">Special Date:</TextBlock>
-            <CheckBox Grid.Row="0" Grid.Column="1" Style="{StaticResource CheckBoxNormal}" Name="CheckBoxSpecial" Click="CheckBoxSpecial_Click"></CheckBox>
+            <CheckBox Grid.Row="0" Grid.Column="1" Style="{StaticResource CheckBoxNormal}" IsChecked="{Binding IsSpecialDay}" Name="CheckBoxSpecial" Click="CheckBoxSpecial_Click"></CheckBox>
             <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource BottomText}">Annual Date:</TextBlock>
-            <CheckBox Grid.Row="0" Grid.Column="3" Style="{StaticResource CheckBoxNormal}" Name="CheckBoxAnnual" Click="CheckBoxAnnual_Click"></CheckBox>
+            <CheckBox Grid.Row="0" Grid.Column="3" Style="{StaticResource CheckBoxNormal}" IsChecked="{Binding IsAnnual}" Name="CheckBoxAnnual" Click="CheckBoxAnnual_Click"></CheckBox>
         </Grid>
     </Grid>
 </Window>

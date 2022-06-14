@@ -21,6 +21,7 @@ namespace DatePicker
     public partial class DatePickerUI : Window
     {
         private DatePickerViewModel dpvm;
+        private SpecialDateList sdl;
 
         public DatePickerUI()
         {
@@ -32,7 +33,7 @@ namespace DatePicker
         private void Window_Closed(object sender, EventArgs e)
         {
             Console.WriteLine("Test");
-            Console.WriteLine(dpvm._today.ToString());
+            Console.WriteLine("IsAnnual: {0}", dpvm.IsAnnual);
         }
 
         private void ButtonDayForward_Click(object sender, RoutedEventArgs e)
@@ -47,7 +48,7 @@ namespace DatePicker
 
         private void ButtonYearForward_Click(object sender, RoutedEventArgs e)
         {
-
+            dpvm.NextYear();
         }
 
         private void ButtonDayBack_Click(object sender, RoutedEventArgs e)
@@ -62,19 +63,17 @@ namespace DatePicker
 
         private void ButtonYearBack_Click(object sender, RoutedEventArgs e)
         {
-
+            dpvm.PreviousYear();
         }
 
         private void CheckBoxSpecial_Click(object sender, RoutedEventArgs e)
         {
-
+            dpvm.IsSpecialDay = (bool) this.CheckBoxSpecial.IsChecked;
         }
 
         private void CheckBoxAnnual_Click(object sender, RoutedEventArgs e)
         {
-
+            dpvm.IsAnnual = (bool) this.CheckBoxAnnual.IsChecked;
         }
     }
-
-
 }
