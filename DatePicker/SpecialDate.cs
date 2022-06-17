@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DatePicker
 {
-    class SpecialDate
+    class SpecialDate : SpecialDateBase
     {
         private int _month;
         private int _day;
@@ -44,27 +44,17 @@ namespace DatePicker
             }
         }
 
-        private String Key
+        public String Key
         {
             get
             {
-                return String.Format("{0}{1}", _prependZero(_month), _prependZero(_day));
+                return _getKeyFromDate(_month, _day);
             }
         }
 
         public void AddYear(int y)
         {
             _years.Add(y);
-        }
-
-        private String _prependZero(int n)
-        {
-            string TwoDigits = n.ToString();
-            if (n < 10)
-            {
-                TwoDigits = String.Format("0{0}", TwoDigits);
-            }
-            return TwoDigits;
         }
 
         private void _setupSpecialDate(int m, int d)

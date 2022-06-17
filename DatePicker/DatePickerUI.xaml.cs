@@ -22,18 +22,24 @@ namespace DatePicker
     {
         private DatePickerViewModel dpvm;
         private SpecialDateList sdl;
+        private String fileName = "speacialDates.xml";
 
         public DatePickerUI()
         {
             InitializeComponent();
             dpvm = new DatePickerViewModel();
             this.DataContext = dpvm;
+
+            sdl = new SpecialDateList();
+            sdl.LoadFile(fileName);
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
             Console.WriteLine("Test");
             Console.WriteLine("IsAnnual: {0}", dpvm.IsAnnual);
+
+            sdl.SaveFile(fileName);
         }
 
         private void ButtonDayForward_Click(object sender, RoutedEventArgs e)
