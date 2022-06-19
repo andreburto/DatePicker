@@ -54,7 +54,15 @@ namespace DatePicker
 
         public void AddYear(int y)
         {
-            _years.Add(y);
+            if (!_years.Contains(y))
+            {
+                _years.Add(y);
+            }
+        }
+
+        public void RemoveYear(int y)
+        {
+            _years.Remove(y);
         }
 
         private void _setupSpecialDate(int m, int d)

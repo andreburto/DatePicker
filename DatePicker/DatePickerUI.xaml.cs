@@ -27,11 +27,13 @@ namespace DatePicker
         public DatePickerUI()
         {
             InitializeComponent();
-            dpvm = new DatePickerViewModel();
-            this.DataContext = dpvm;
 
             sdl = new SpecialDateList();
             sdl.LoadFile(fileName);
+
+            dpvm = new DatePickerViewModel();
+            dpvm.DatesList = sdl;
+            this.DataContext = dpvm;
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -44,12 +46,12 @@ namespace DatePicker
 
         private void ButtonDayForward_Click(object sender, RoutedEventArgs e)
         {
-            
+            dpvm.NextDay();
         }
 
         private void ButtonMonthForward_Click(object sender, RoutedEventArgs e)
         {
-
+            dpvm.NextMonth();
         }
 
         private void ButtonYearForward_Click(object sender, RoutedEventArgs e)
@@ -59,12 +61,12 @@ namespace DatePicker
 
         private void ButtonDayBack_Click(object sender, RoutedEventArgs e)
         {
-
+            dpvm.PreviousDay();
         }
 
         private void ButtonMonthBack_Click(object sender, RoutedEventArgs e)
         {
-
+            dpvm.PreviousMonth();
         }
 
         private void ButtonYearBack_Click(object sender, RoutedEventArgs e)

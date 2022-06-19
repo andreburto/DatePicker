@@ -13,7 +13,22 @@ namespace DatePicker
         private DateTime _currentDay;
         private bool _annual;
         private bool _specialDay;
-        private SpecialDate sd;
+        private SpecialDateList _datesList;
+
+        public SpecialDateList DatesList
+        {
+            get
+            {
+                return _datesList;
+            }
+            set
+            {
+                if (_datesList == null)
+                {
+                    _datesList = value;
+                }
+            }
+        }
 
         public bool IsAnnual
         {
@@ -76,7 +91,7 @@ namespace DatePicker
         {
             get
             {
-                return _currentDay.Month > _today.Month;
+                return YearGoBack || _today.Month > _currentDay.Month;
             }
         }
 
@@ -84,25 +99,71 @@ namespace DatePicker
         {
             get
             {
-                return _currentDay.Date > _today.Date;
+                return MonthGoBack || _today.Date > _currentDay.Date;
             }
         }
 
-        private void _changeYear(int n)
+        private void _changeDate(DateTime newDate)
         {
-            _today = _today.AddYears(n);
-            NotifyPropertyChanged("Year");
+            DateTime _oldDate = _today;
+
+            // Never go past the current day.
+            if (newDate.Date > _currentDay.Date)
+            {
+                _today = newDate;
+            }
+            else
+            {
+                _today = _currentDay;
+            }
+            
+            if (_today.Year > _oldDate.Year)
+            {
+                NotifyPropertyChanged("Year");
+            }
+
+            if (_today.Month != _oldDate.Month)
+            {
+                NotifyPropertyChanged("Month");
+            }
+
+            // Always calculate these when the date changes.
+            NotifyPropertyChanged("DayOfWeek");
             NotifyPropertyChanged("YearGoBack");
+            NotifyPropertyChanged("MonthGoBack");
+            NotifyPropertyChanged("DayGoBack");
+            NotifyPropertyChanged("IsSpecialDay");
+            NotifyPropertyChanged("IsAnnual");
         }
 
         public void NextYear()
         {
-            _changeYear(1);
+            _changeDate(_today.AddYears(1));
+        }
+
+        public void NextMonth()
+        {
+            _changeDate(_today.AddMonths(1));
+        }
+
+        public void NextDay()
+        {
+            _changeDate(_today.AddDays(1));
         }
 
         public void PreviousYear()
         {
-            _changeYear(-1);
+            _changeDate(_today.AddYears(-1));
+        }
+
+        public void PreviousMonth()
+        {
+            _changeDate(_today.AddMonths(-1));
+        }
+
+        public void PreviousDay()
+        {
+            _changeDate(_today.AddDays(-1));
         }
 
         public DatePickerViewModel()
