@@ -1,5 +1,7 @@
 # DatePicker
 
+![DatePicker GUI](/assets/images/datepicker_20220626.PNG)
+
 ## About
 
 An experimental UI for the [Payday toy](https://github.com/andreburto/Payday).
