@@ -1,6 +1,6 @@
 # DatePicker
 
-![DatePicker GUI](/assets/images/datepicker_20220626.PNG)
+![DatePicker GUI](https://github.com/andreburto/DatePicker/raw/master/images/datepicker_20220626.png)
 
 ## About
 
