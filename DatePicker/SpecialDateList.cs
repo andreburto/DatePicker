@@ -44,14 +44,15 @@ namespace DatePicker
 
         }
 
+        public SpecialDate GetDate(int m, int d)
+        {
+            return GetDate(this._getKeyFromDate(m, d));
+        }
+
         private void AddAnnualDate(int m, int d)
         {
             SpecialDate sd = new SpecialDate(m, d);
-
-            if (_specialDateList.Keys.Contains(sd.Key))
-            {
-                _specialDateList[sd.Key] = sd;
-            }
+            _specialDateList[sd.Key] = sd;
         }
 
         private void AddSpecificDate(int m, int d, int y)
@@ -116,6 +117,7 @@ namespace DatePicker
                 if (newDate.IsAnnual)
                 {
                     AddAnnualDate(newDate.Month, newDate.Day);
+                    Console.WriteLine("SynchronizeDate: 1");
                 }
                 else
                 {
@@ -123,35 +125,45 @@ namespace DatePicker
                     {
                         AddSpecificDate(newDate.Month, newDate.Day, y);
                     }
+                    Console.WriteLine("SynchronizeDate: 2");
                 }
             }
             else
             {
+                Console.WriteLine("SynchronizeDate: newDate {0}, existingDate {1}",
+                    newDate.IsAnnual, existingDate.IsAnnual);
                 if (newDate.IsAnnual && !existingDate.IsAnnual)
                 {
                     // Overwrite the existing specific date with an annual one.
                     _specialDateList[newDate.Key] = newDate;
+                    Console.WriteLine("SynchronizeDate: 3");
                 }
                 else
                 {
+                    Console.WriteLine("SynchronizeDate: 4a");
                     // Loop through the years associated with the new date.
                     foreach (int newYear in newDate.Years)
                     {
+                        Console.WriteLine("SynchronizeDate: 4b");
                         // Remove old years if they are in existingDate.
                         foreach (int existingYear in existingDate.Years)
                         {
+                            Console.WriteLine("SynchronizeDate: 4c");
                             if (existingYear < newYear)
                             {
+                                Console.WriteLine("SynchronizeDate: 4d");
                                 existingDate.RemoveYear(existingYear);
                             }
                         }
 
                         // Update the existing date with any new years.
+                        Console.WriteLine("SynchronizeDate: 4e");
                         existingDate.AddYear(newYear);
                     }
 
                     // Once the years have been synchrnized, overwrite the old entry.
                     _specialDateList[existingDate.Key] = existingDate;
+                    Console.WriteLine("SynchronizeDate: 4");
                 }
             }
         }
@@ -237,6 +249,7 @@ namespace DatePicker
             }
 
             // Save that file.
+            Console.WriteLine(doc.InnerXml);
             doc.Save(file);
         }
 

@@ -29,17 +29,22 @@ namespace DatePicker
             InitializeComponent();
 
             sdl = new SpecialDateList();
+            Console.WriteLine("DatePickerUI: before load, {0}", sdl.DateKeys.Count);
             sdl.LoadFile(fileName);
+            Console.WriteLine("DatePickerUI: after load, {0}", sdl.DateKeys.Count);
 
-            dpvm = new DatePickerViewModel();
-            dpvm.DatesList = sdl;
+            dpvm = new DatePickerViewModel(sdl);
             this.DataContext = dpvm;
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
+            dpvm.UpdateList();
+
             Console.WriteLine("Test");
-            Console.WriteLine("IsAnnual: {0}", dpvm.IsAnnual);
+            Console.WriteLine("Window_Closed: {0}", dpvm.DatesList.DatesToRemove.ToString());
+
+            sdl.SynchronizeLists(dpvm.DatesList);
 
             sdl.SaveFile(fileName);
         }
@@ -76,11 +81,13 @@ namespace DatePicker
 
         private void CheckBoxSpecial_Click(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine("CheckBoxSpecial: {0}", this.CheckBoxSpecial.IsChecked);
             dpvm.IsSpecialDay = (bool) this.CheckBoxSpecial.IsChecked;
         }
 
         private void CheckBoxAnnual_Click(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine("CheckBoxAnnual: {0}", this.CheckBoxAnnual.IsChecked);
             dpvm.IsAnnual = (bool) this.CheckBoxAnnual.IsChecked;
         }
     }

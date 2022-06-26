@@ -72,11 +72,18 @@ namespace DatePicker
             _years = new List<int>();
         }
 
+        public override string ToString()
+        {
+            return String.Format("{0}-{1}, IsAnnual: {2}", _month, _day, IsAnnual);
+        }
+
+        // Annual date
         public SpecialDate(int m, int d)
         {
             _setupSpecialDate(m, d);
         }
 
+        // Special date, not annual
         public SpecialDate(int m, int d, int y)
         {
             _setupSpecialDate(m, d);

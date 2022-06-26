@@ -21,13 +21,6 @@ namespace DatePicker
             {
                 return _datesList;
             }
-            set
-            {
-                if (_datesList == null)
-                {
-                    _datesList = value;
-                }
-            }
         }
 
         public bool IsAnnual
@@ -103,9 +96,61 @@ namespace DatePicker
             }
         }
 
+        public void UpdateList()
+        {
+            SpecialDate sd = _datesList.GetDate(_today.Month, _today.Day);
+            if (this.IsSpecialDay)
+            {
+                if (this.IsAnnual)
+                {
+                    sd = new SpecialDate(_today.Month, _today.Day);
+                }
+                else
+                {
+                    sd = new SpecialDate(_today.Month, _today.Day, _today.Year);
+                }
+                _datesList.SynchronizeDate(sd);
+                Console.WriteLine("UpdateList: {0}", sd.ToString());
+            }
+            else
+            {
+                if (sd != null)
+                {
+                    _datesList.SetDateToRemove(sd.Key);
+                }
+                Console.WriteLine("UpdateList: No date");
+            }
+            Console.WriteLine("UpdateList: {0}", _datesList.DateKeys.Count);
+        }
+
+        private void _updateCheckBoxes(SpecialDate sd)
+        {
+            if (sd == null)
+            {
+                Console.WriteLine("_updateCheckBoxes: has date");
+                _specialDay = false;
+                _annual = false;
+            }
+            else
+            {
+                Console.WriteLine("_updateCheckBoxes: no date");
+                _specialDay = true;
+                _annual = sd.IsAnnual;
+            }
+
+            Console.WriteLine("_updateCheckBoxes: {0}", IsSpecialDay);
+
+            NotifyPropertyChanged("IsSpecialDay");
+            NotifyPropertyChanged("IsAnnual");
+        }
+
         private void _changeDate(DateTime newDate)
         {
+            Console.WriteLine("newDate: {0}-{1}", newDate.Month, newDate.Day);
             DateTime _oldDate = _today;
+            
+            // Update Special Day list
+            UpdateList();
 
             // Never go past the current day.
             if (newDate.Date > _currentDay.Date)
@@ -116,24 +161,29 @@ namespace DatePicker
             {
                 _today = _currentDay;
             }
+
+            if (_today.Month != _oldDate.Month)
+            {
+                NotifyPropertyChanged("Month");
+            }
             
             if (_today.Year > _oldDate.Year)
             {
                 NotifyPropertyChanged("Year");
             }
 
-            if (_today.Month != _oldDate.Month)
-            {
-                NotifyPropertyChanged("Month");
-            }
-
             // Always calculate these when the date changes.
+            NotifyPropertyChanged("Year");
+            NotifyPropertyChanged("Month");
             NotifyPropertyChanged("DayOfWeek");
             NotifyPropertyChanged("YearGoBack");
             NotifyPropertyChanged("MonthGoBack");
             NotifyPropertyChanged("DayGoBack");
-            NotifyPropertyChanged("IsSpecialDay");
-            NotifyPropertyChanged("IsAnnual");
+
+            // Update checkboxes
+            SpecialDate newSpecialDay = _datesList.GetDate(_today.Month, _today.Day);
+            _updateCheckBoxes(newSpecialDay);
+            Console.WriteLine("newSpecialDay: {0}", newSpecialDay);
         }
 
         public void NextYear()
@@ -166,12 +216,16 @@ namespace DatePicker
             _changeDate(_today.AddDays(-1));
         }
 
-        public DatePickerViewModel()
+        public DatePickerViewModel(SpecialDateList sdl)
         {
+            // Setup the object
             _today = DateTime.Now;
             _currentDay = DateTime.Now;
-            _annual = false;
-            _specialDay = false;
+            _datesList = sdl;
+
+            // Tweak the UI check boxes
+            SpecialDate sd = _datesList.GetDate(_today.Day, _today.Month);
+            _updateCheckBoxes(sd);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
